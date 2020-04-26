@@ -47,5 +47,5 @@ This is modular discord bot, there are few modules available, you can check them
 | Standard request Module | https://github.com/eskejpo/discord-bot-modules/tree/master/request |
 | Cache Module | https://github.com/eskejpo/discord-bot-modules/tree/master/cache |
 | Server exclusive memory Module | https://github.com/eskejpo/discord-bot-modules/tree/master/memory |
-| MySQL Module | https://github.com/eskejpo/discord-bot-modules/tree/master/MySQL |
+| MySQL Module | https://github.com/eskejpo/discord-bot-modules/tree/master/mysql |
 

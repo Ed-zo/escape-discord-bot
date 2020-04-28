@@ -48,4 +48,5 @@ This is modular discord bot, there are few modules available, you can check them
 | Cache Module | https://github.com/eskejpo/discord-bot-modules/tree/master/cache |
 | Server exclusive memory Module | https://github.com/eskejpo/discord-bot-modules/tree/master/memory |
 | MySQL Module | https://github.com/eskejpo/discord-bot-modules/tree/master/mysql |
+| Task Queue | https://github.com/eskejpo/discord-bot-modules/tree/master/taskqueue |
 

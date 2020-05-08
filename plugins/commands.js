@@ -118,8 +118,8 @@ var moduleFunction = async(client, moduleLoader, config) => {
             var smsg = message.content.match(/'[^']*'|"[^"]*"|\S+/g) || [];
 
             for (var i in smsg) {
-                if (/\s/.test(smsg[i]) && typeof smsg[i] == "string")
-                    smsg[i] = smsg[i].replaceAll('\"', "");
+                if (smsg[i].includes('"') && typeof smsg[i] == "string")
+                    smsg[i] = smsg[i].replaceAll('"', "");
 
                 smsg[i] = parseInt(smsg[i]) ? parseInt(smsg[i]) : smsg[i];
                 smsg[i] = parseFloat(smsg[i]) ? parseFloat(smsg[i]) : smsg[i];

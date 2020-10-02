@@ -6,41 +6,56 @@ function to(promise) {
         .catch(err => [err]);
 }
 
-YouTubeGetID = function(url) {
-    var ID = '';
-    console.log(url, "TEST")
-    url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-    if (url[2] !== undefined) {
-        ID = url[2].split(/[^0-9a-z_\-]/i);
-        ID = ID[0];
-        return ID;
-    }
-    return url;
-}
-
-function arrayContainsArray(superset, subset) {
-    if (!superset || !subset)
+function limitLength(what, min, max) {
+    if (typeof what != "string")
         return false;
-    return subset.every(function(value) {
-        return superset.indexOf(value) >= 0;
-    });
+
+    if (!what.length)
+        return false;
+
+    if (what.length > max)
+        return false;
+
+    if (what.length < min)
+        return false;
+
+    return true;
 }
 
-var isObject = object => {
-    return typeof object == "object" && !Array.isArray(object);
-};
+class Lock {
+    constructor(limit) {
+        this.locks = [];
+        this.limit = limit || 500;
+    }
 
-var isArray = object => {
-    return typeof object == "object" && Array.isArray(object);
-};
+    lock(key) {
+        if (this.locks.length >= this.limit)
+            return -1;
 
-var isClass = v => {
-    return typeof v === "function" && /^\s*class\s+/.test(v.toString());
-};
+        if (this.locked(key))
+            return false;
+        this.locks.push(key);
+        return true;
+    }
 
-function isNumber(n) {
-    return !isNaN(parseFloat(n)) && !isNaN(n - 0)
+    unlock(key) {
+        if (this.locked(key)) {
+            var index = this.locks.indexOf(key);
+            if (index != -1) {
+                this.locks.splice(index, 1);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    locked(key) {
+        if (this.locks.includes(key))
+            return true;
+        return false;
+    }
 }
+
 
 class Enum {
     constructor(data) {
@@ -119,8 +134,6 @@ async function asyncForEach(array, callback) {
     }
 }
 
-
-
 module.exports = {
     to: to,
     arrayContainsArray: arrayContainsArray,
@@ -133,5 +146,7 @@ module.exports = {
     isNumber: isNumber,
     chunkify: chunkify,
     sleep: sleep,
-    asyncForEach: asyncForEach
+    asyncForEach: asyncForEach,
+    Lock: Lock,
+    limitLength: limitLength
 };

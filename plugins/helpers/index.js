@@ -57,6 +57,23 @@ class Lock {
 }
 
 
+
+var isObject = object => {
+    return typeof object == "object" && !Array.isArray(object);
+};
+
+var isArray = object => {
+    return typeof object == "object" && Array.isArray(object);
+};
+
+var isClass = v => {
+    return typeof v === "function" && /^\s*class\s+/.test(v.toString());
+};
+
+function isNumber(n) {
+    return !isNaN(parseFloat(n)) && !isNaN(n - 0)
+}
+
 class Enum {
     constructor(data) {
         var rval = {};
@@ -134,6 +151,60 @@ async function asyncForEach(array, callback) {
     }
 }
 
+class Recent {
+    constructor(keep, key) {
+        this.keep = keep;
+        this.recent = [];
+        this.key = key;
+        return this;
+    }
+
+    add(thing) {
+        if (this.recent.filter(a => a[this.key] == thing[this.key]).length > 0)
+            return false;
+
+        if (this.recent.length == this.keep) this.recent.pop();
+
+        this.recent.unshift(thing);
+    }
+
+    get() {
+        return this.recent.map(a => {
+            var b = {...a }
+            delete b.key;
+            return b;
+        });
+    }
+}
+
+function parseItems(string) {
+    var items = string.split(";");
+    return items.map((pair) => {
+        var k = pair.split(":");
+        return {
+            id: Number(k[0]),
+            permanentEnchant: Number(k[1]),
+        };
+    });
+}
+
+function responseError(res, toSend) {
+    res.status(403);
+    res.json({
+        data: null,
+        error: toSend,
+    });
+}
+
+function responseOk(res, toSend) {
+    res.status(200);
+    res.json({
+        data: toSend,
+        error: null,
+    });
+}
+
+
 module.exports = {
     to: to,
     arrayContainsArray: arrayContainsArray,
@@ -147,6 +218,10 @@ module.exports = {
     chunkify: chunkify,
     sleep: sleep,
     asyncForEach: asyncForEach,
+    Recent: Recent,
+    parseItems: parseItems,
+    responseError: responseError,
+    responseOk: responseOk,
     Lock: Lock,
     limitLength: limitLength
 };
